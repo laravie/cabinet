@@ -1,6 +1,6 @@
 <?php
 
-namespace Katsana\Model\Concerns;
+namespace Laravie\Cabinet;
 
 use InvalidArgumentException;
 use Illuminate\Cache\ArrayStore;
