@@ -4,8 +4,8 @@ namespace Katsana\Model\Concerns;
 
 use InvalidArgumentException;
 use Illuminate\Cache\ArrayStore;
-use Illuminate\Cache\Repository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Cache\Repository as CacheRepository;
 
 class Repository
 {
@@ -31,7 +31,7 @@ class Repository
     public function __construct(Model $eloquent)
     {
         $this->eloquent = $eloquent;
-        $this->memory = new self(new ArrayStore());
+        $this->memory = new CacheRepository(new ArrayStore());
     }
 
     /**
