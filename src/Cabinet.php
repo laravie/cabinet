@@ -24,9 +24,7 @@ trait Cabinet
         if (! isset($this->cabinet)) {
             $this->cabinet = new Repository($this);
 
-            if (method_exists($this, 'bootCabinet')) {
-                $this->bootCabinet($this->cabinet);
-            }
+            $this->bootCabinet($this->cabinet);
         }
 
         if (! is_null($key)) {
