@@ -9,6 +9,11 @@
             "email": "crynobone@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Laravie\\Cabinet\\": "src/"
+        }
+    },
     "require": {
         "illuminate/cache": "~5.4",
         "illuminate/database": "~5.4"

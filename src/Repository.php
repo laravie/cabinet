@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Cache\Repository as CacheRepository;
+use Illuminate\Contracts\Cache\Repository as CacheContract;
 
 class Repository
 {
@@ -17,11 +18,32 @@ class Repository
     protected $eloquent;
 
     /**
+     * In-memory cache repository.
+     *
+     * @var \Illuminate\Cache\Repository
+     */
+    protected $memory;
+
+    /**
+     * Persistent cache repository.
+     *
+     * @var \Illuminate\Cache\TaggedCache|null
+     */
+    protected $storage;
+
+    /**
      * Registered cabinet collection.
      *
      * @var array
      */
     protected $collections = [];
+
+    /**
+     * Persistents collection.
+     *
+     * @var array
+     */
+    protected $remembers = [];
 
     /**
      * Construct a new eloquent repository.
@@ -35,12 +57,67 @@ class Repository
     }
 
     /**
-     * Add caching service.
+     * Set persistent cache repository.
      *
-     * @param string   $key
-     * @param callable $callback
+     * @param \Illuminate\Contracts\Cache\Repository $cache
      */
-    public function add(string $key, callable $callback): self
+    public function setStorage(CacheContract $cache): self
+    {
+        $tags = sprintf(
+            'cabinet-%s-%s-%s',
+            $this->eloquent->getConnectionName(),
+            $this->eloquent->getTableName(),
+            $this->eloquent->getKey()
+        );
+
+        if (method_exists($cache->getStore(), 'tags')) {
+            $this->storage = $cache->tags($tags);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Register new persistent cache data.
+     *
+     * @param  string   $key
+     * @param  callable  $callback
+     *
+     * @return $this
+     */
+    public function forever(string $key, callable $callback): self
+    {
+        $this->remembers[$key] = 'forever';
+
+        return $this->register($key, $callback, true);
+    }
+
+    /**
+     * Register new persistent cache data.
+     *
+     * @param  string   $key
+     * @param  \DateTimeInterface|\DateInterval|float|int  $minutes
+     * @param  callable  $callback
+     *
+     * @return $this
+     */
+    public function remember(string $key, $minutes, callable $callback): self
+    {
+        $this->remembers[$key] = $minutes;
+
+        return $this->register($key, $callback);
+    }
+
+    /**
+     * Register new in-memory cache data.
+     *
+     * @param  string   $key
+     * @param  callable  $callback
+     * @param  bool  $persistent
+     *
+     * @return $this
+     */
+    public function register(string $key, callable $callback, bool $persistent = false): self
     {
         $this->collections[$key] = $callback;
 
@@ -62,9 +139,17 @@ class Repository
             throw new InvalidArgumentException("Requested [{$key}] is not registered!");
         }
 
-        return $this->memory->sear($key, function () use ($key) {
-            return $this->collections[$key]($this->eloquent);
-        });
+        $callback = $this->getCacheResolver($key);
+
+        if (! is_null($this->storage) && ! is_null($duration = ($this->remembers[$key] ?? null))) {
+            if ($duration === 'forever') {
+                return $this->storage->rememberForever($key, $callback);
+            }
+
+            return $this->storage->remember($key, $duration, $callback);
+        }
+
+        return $this->memory->sear($key, $callback);
     }
 
     /**
@@ -80,6 +165,24 @@ class Repository
             $this->memory->forget($key);
         }
 
+        if (! is_null($this->storage)) {
+            $this->storage->flush();
+        }
+
         return $this;
+    }
+
+    /**
+     * Get cache resolver.
+     *
+     * @param  string  $key
+     *
+     * @return \Closure
+     */
+    protected function getCacheResolver(string $key)
+    {
+        return function() use ($key) {
+            return $this->collections[$key]($this->eloquent);
+        };
     }
 }

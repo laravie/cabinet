@@ -24,7 +24,9 @@ trait Cabinet
         if (! isset($this->cabinet)) {
             $this->cabinet = new Repository($this);
 
-            $this->bootCabinet($this->cabinet);
+            if (method_exists($this, 'bootCabinet')) {
+                $this->bootCabinet($this->cabinet);
+            }
         }
 
         if (! is_null($key)) {
@@ -33,13 +35,4 @@ trait Cabinet
 
         return $this->cabinet;
     }
-
-    /**
-     * Boot cabinet.
-     *
-     * @param  \Laravie\Cabinet\Repository  $cabinet
-     *
-     * @return void
-     */
-    abstract protected function bootCabinet(Repository $cabinet);
 }
