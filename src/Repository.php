@@ -66,7 +66,7 @@ class Repository
         $tags = sprintf(
             'cabinet-%s-%s-%s',
             $this->eloquent->getConnectionName(),
-            $this->eloquent->getTableName(),
+            $this->eloquent->getTable(),
             $this->eloquent->getKey()
         );
 
