@@ -1,0 +1,20 @@
+{
+    "name": "laravie/cabinet",
+    "description": "Runtime Cache for Eloquent",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mior Muhammad Zaki",
+            "email": "crynobone@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/cache": "~5.4",
+        "illuminate/database": "~5.4"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
+}
