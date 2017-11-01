@@ -153,6 +153,24 @@ class Repository
     }
 
     /**
+     * Forget cache by key.
+     *
+     * @param  string  $key
+     *
+     * @return $this
+     */
+    public function forget(string $key): self
+    {
+        $this->memory->forget($key);
+
+        if (! is_null($this->storage)) {
+            $this->storage->forget($key);
+        }
+
+        return $this;
+    }
+
+    /**
      * Flush all keys.
      *
      * @return $this
@@ -181,7 +199,7 @@ class Repository
      */
     protected function getCacheResolver(string $key)
     {
-        return function() use ($key) {
+        return function () use ($key) {
             return $this->collections[$key]($this->eloquent);
         };
     }
