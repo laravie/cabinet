@@ -26,7 +26,7 @@
     },
     "require-dev": {
         "mockery/mockery": "~0.9.4 || ~1.0",
-        "orchestra/testbench": "~3.4.4 || ~3.5",
+        "orchestra/testbench": "~3.4.8 || ~3.5.2",
         "phpunit/phpunit": "~5.7 || ~6.0",
         "predis/predis": "^1.1"
     },
