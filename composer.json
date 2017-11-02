@@ -14,6 +14,11 @@
             "Laravie\\Cabinet\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Laravie\\Cabinet\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "php": ">=7.0",
         "illuminate/cache": "~5.4",
