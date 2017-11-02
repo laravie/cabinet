@@ -61,7 +61,7 @@ class Repository
      *
      * @param \Illuminate\Contracts\Cache\Repository $cache
      */
-    public function setStorage(CacheContract $cache): self
+    public function setStorage(CacheContract $cache)
     {
         $tags = sprintf(
             'cabinet-%s-%s-%s',
@@ -85,7 +85,7 @@ class Repository
      *
      * @return $this
      */
-    public function forever(string $key, callable $callback): self
+    public function forever($key, callable $callback)
     {
         $this->remembers[$key] = 'forever';
 
@@ -101,7 +101,7 @@ class Repository
      *
      * @return $this
      */
-    public function remember(string $key, $minutes, callable $callback): self
+    public function remember($key, $minutes, callable $callback)
     {
         $this->remembers[$key] = $minutes;
 
@@ -117,7 +117,7 @@ class Repository
      *
      * @return $this
      */
-    public function register(string $key, callable $callback, bool $persistent = false): self
+    public function register($key, callable $callback, $persistent = false)
     {
         $this->collections[$key] = $callback;
 
@@ -133,7 +133,7 @@ class Repository
      *
      * @throws \InvalidArgumentException
      */
-    public function get(string $key)
+    public function get($key)
     {
         if (! array_key_exists($key, $this->collections)) {
             throw new InvalidArgumentException("Requested [{$key}] is not registered!");
@@ -159,7 +159,7 @@ class Repository
      *
      * @return $this
      */
-    public function forget(string $key): self
+    public function forget($key)
     {
         $this->memory->forget($key);
 
@@ -175,7 +175,7 @@ class Repository
      *
      * @return $this
      */
-    public function flush(): self
+    public function flush()
     {
         $keys = array_keys($this->collections);
 
@@ -197,7 +197,7 @@ class Repository
      *
      * @return \Closure
      */
-    protected function getCacheResolver(string $key)
+    protected function getCacheResolver($key)
     {
         return function () use ($key) {
             return $this->collections[$key]($this->eloquent);

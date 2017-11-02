@@ -13,10 +13,11 @@ class User extends Authenticatable
 
     protected function onCabinet(Repository $cabinet)
     {
-        $cabinet->register('friends', function ($user) {
-            return ['Taylor', 'Mior Muhammad Zaki'];
-        })->register('now', function ($user) {
-            return Carbon::now('Asia/Kuala_Lumpur');
-        });
+        $cabinet->setStorage(resolve('cache.store'))
+            ->register('now', function ($user) {
+                return Carbon::now('Asia/Kuala_Lumpur');
+            })->forever('last_read', function ($user) use ($cabinet) {
+                return $cabinet->get('now')->toDateTimeString();
+            });
     }
 }

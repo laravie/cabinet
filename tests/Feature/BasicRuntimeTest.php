@@ -5,12 +5,17 @@ namespace Laravie\Cabinet\Tests\Feature;
 use Laravie\Cabinet\Tests\TestCase;
 use Laravie\Cabinet\Tests\Stubs\User;
 
-class UserTest extends TestCase
+class BasicRuntimeTest extends TestCase
 {
     /** @test */
     public function it_has_registered_caches()
     {
         $user = factory(User::class)->create();
+
+        $user->cabinet()
+            ->register('friends', function ($user) {
+                return ['Taylor', 'Mior Muhammad Zaki'];
+            });
 
         $this->assertSame(['Taylor', 'Mior Muhammad Zaki'], $user->cabinet('friends'));
         $this->assertSame(['Taylor', 'Mior Muhammad Zaki'], $user->cabinet()->get('friends'));

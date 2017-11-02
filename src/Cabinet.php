@@ -19,7 +19,7 @@ trait Cabinet
      *
      * @return \Laravie\Cabinet\Repository|mixed
      */
-    public function cabinet(string $key = null, $default = null)
+    public function cabinet($key = null, $default = null)
     {
         if (! isset($this->cabinet)) {
             $this->cabinet = new Repository($this);

@@ -13,7 +13,6 @@ class TestCase extends Testbench
     {
         parent::setUp();
 
-
         $this->withFactories(__DIR__.'/factories');
 
         $this->loadLaravelMigrations('testing');
