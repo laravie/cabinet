@@ -15,8 +15,15 @@ env:
     - laravel=5.4.*
     - laravel=5.5.*
 
+services:
+  - redis-server
+
+before_install:
+  - printf "\n" | pecl install -f redis
+  - travis_retry composer self-update
+
 before_script:
-  - composer config discard-changes trueinstall:
+  - composer config discard-changes true
   - if [[ $setup = 'basic' ]]; then travis_retry composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest; fi
   - if [[ $setup = 'stable' ]]; then travis_retry composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest --prefer-stable --prefer-lowest; fi
