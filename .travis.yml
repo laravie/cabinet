@@ -40,10 +40,6 @@ matrix:
   include:
     - php: 5.6
       env:
-        - setup=lowest
-        - laravel=5.4.*
-    - php: 5.6
-      env:
         - setup=stable
         - laravel=5.4.*
     - php: 7.0
@@ -57,6 +53,5 @@ matrix:
     - php: 7.0
       env: setup=coveralls coverage=yes laravel=5.5.*
   allow_failures:
-    - env: setup=lowest laravel=5.4.*
     - env: setup=coveralls coverage=yes laravel=5.5.*
   fast_finish: true
