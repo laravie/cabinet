@@ -63,12 +63,12 @@ class Repository
      */
     public function setStorage(CacheContract $cache)
     {
-        $tags = sprintf(
-            'cabinet-%s-%s-%s',
-            $this->eloquent->getConnectionName(),
-            $this->eloquent->getTable(),
-            $this->eloquent->getKey()
-        );
+        $model = $this->eloquent;
+
+        $tags = [
+            sprintf('cabinet-%s:%s-%s', $model->getConnectionName(), $model->getTable(), $model->getKey()),
+            sprintf('cabinet-%s-%s', $model->getTable(), $model->getKey())
+        ];
 
         if (method_exists($cache->getStore(), 'tags')) {
             $this->storage = $cache->tags($tags);
