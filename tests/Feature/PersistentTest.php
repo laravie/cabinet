@@ -22,6 +22,11 @@ class PersistentTest extends TestCase
         $this->assertNotEquals($different->cabinet('now')->toDateTimeString(), $lastRead);
         $this->assertEquals($different->cabinet('last_read'), $lastRead);
 
-        $this->assertEquals(resolve('cache.store')->tags('cabinet-testing-users-1')->get('last_read'), $lastRead);
+        $tags = [
+            'cabinet-testing:users-1',
+            'cabinet-users-1',
+        ];
+
+        $this->assertEquals(resolve('cache.store')->tags($tags)->get('last_read'), $lastRead);
     }
 }
