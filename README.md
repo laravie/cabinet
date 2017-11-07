@@ -1,4 +1,4 @@
-PHP library for building API Client SDK for PHP
+Runtime Cache for Laravel Eloquent
 ==============
 
 [![Build Status](https://travis-ci.org/laravie/cabinet.svg?branch=master)](https://travis-ci.org/laravie/cabinet)

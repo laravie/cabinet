@@ -1,6 +1,6 @@
 {
     "name": "laravie/cabinet",
-    "description": "Runtime Cache for Eloquent",
+    "description": "Runtime Cache for Laravel Eloquent",
     "type": "library",
     "license": "MIT",
     "authors": [
