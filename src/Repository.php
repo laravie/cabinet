@@ -48,7 +48,7 @@ class Repository
     /**
      * Construct a new eloquent repository.
      *
-     * @param \Illuminate\Database\Eloquent\Model $eloquent
+     * @param \Illuminate\Database\Eloquent\Model  $eloquent
      */
     public function __construct(Model $eloquent)
     {
@@ -59,9 +59,11 @@ class Repository
     /**
      * Set persistent cache repository.
      *
-     * @param \Illuminate\Contracts\Cache\Repository $cache
+     * @param  \Illuminate\Contracts\Cache\Repository  $cache
+     *
+     * @return $this
      */
-    public function setStorage(CacheContract $cache)
+    public function setStorage(CacheContract $cache): self
     {
         $model = $this->eloquent;
 
@@ -80,12 +82,12 @@ class Repository
     /**
      * Register new persistent cache data.
      *
-     * @param  string   $key
+     * @param  string  $key
      * @param  callable  $callback
      *
      * @return $this
      */
-    public function forever($key, callable $callback)
+    public function forever(string $key, callable $callback): self
     {
         $this->remembers[$key] = 'forever';
 
@@ -95,13 +97,13 @@ class Repository
     /**
      * Register new persistent cache data.
      *
-     * @param  string   $key
+     * @param  string  $key
      * @param  \DateTimeInterface|\DateInterval|float|int  $minutes
      * @param  callable  $callback
      *
      * @return $this
      */
-    public function remember($key, $minutes, callable $callback)
+    public function remember(string $key, $minutes, callable $callback): self
     {
         $this->remembers[$key] = $minutes;
 
@@ -111,13 +113,13 @@ class Repository
     /**
      * Register new in-memory cache data.
      *
-     * @param  string   $key
+     * @param  string  $key
      * @param  callable  $callback
      * @param  bool  $persistent
      *
      * @return $this
      */
-    public function register($key, callable $callback, $persistent = false)
+    public function register(string $key, callable $callback, bool $persistent = false): self
     {
         $this->collections[$key] = $callback;
 
@@ -133,7 +135,7 @@ class Repository
      *
      * @throws \InvalidArgumentException
      */
-    public function get($key)
+    public function get(string $key)
     {
         if (! array_key_exists($key, $this->collections)) {
             throw new InvalidArgumentException("Requested [{$key}] is not registered!");
@@ -161,7 +163,7 @@ class Repository
      *
      * @return $this
      */
-    public function forget($key)
+    public function forget(string $key): self
     {
         $this->memory->forget($key);
 
@@ -177,7 +179,7 @@ class Repository
      *
      * @return $this
      */
-    public function flush()
+    public function flush(): self
     {
         $keys = array_keys($this->collections);
 
@@ -199,7 +201,7 @@ class Repository
      *
      * @return \Closure
      */
-    protected function getCacheResolver($key)
+    protected function getCacheResolver(string $key)
     {
         return function () use ($key) {
             return $this->collections[$key]($this->eloquent);
