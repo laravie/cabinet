@@ -199,9 +199,9 @@ class Repository
      *
      * @param  string  $key
      *
-     * @return \Closure
+     * @return callable
      */
-    protected function getCacheResolver(string $key)
+    protected function getCacheResolver(string $key): callable
     {
         return function () use ($key) {
             return $this->collections[$key]($this->eloquent);
