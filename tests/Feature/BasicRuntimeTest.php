@@ -28,7 +28,7 @@ class BasicRuntimeTest extends TestCase
 
         $now = $user->cabinet('now');
 
-        $this->assertSame($now, $user->cabinet('now'));
+        $this->assertEquals($now, $user->cabinet('now'));
     }
 
     /** @test */

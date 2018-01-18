@@ -3,9 +3,7 @@
 namespace Laravie\Cabinet;
 
 use InvalidArgumentException;
-use Illuminate\Cache\ArrayStore;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 
 class Repository
@@ -18,16 +16,16 @@ class Repository
     protected $eloquent;
 
     /**
-     * In-memory cache repository.
+     * Runtime cache repository.
      *
-     * @var \Illuminate\Cache\Repository
+     * @var \Laravie\Cabinet\Contracts\Storage
      */
     protected $memory;
 
     /**
      * Persistent cache repository.
      *
-     * @var \Illuminate\Cache\TaggedCache|null
+     * @var \Laravie\Cabinet\Contracts\Storage
      */
     protected $storage;
 
@@ -53,7 +51,7 @@ class Repository
     public function __construct(Model $eloquent)
     {
         $this->eloquent = $eloquent;
-        $this->memory = new CacheRepository(new ArrayStore());
+        $this->memory = new Storage\Runtime();
     }
 
     /**
@@ -69,11 +67,11 @@ class Repository
 
         $tags = [
             sprintf('cabinet-%s:%s-%s', $model->getConnectionName(), $model->getTable(), $model->getKey()),
-            sprintf('cabinet-%s-%s', $model->getTable(), $model->getKey())
+            sprintf('cabinet-%s-%s', $model->getTable(), $model->getKey()),
         ];
 
         if (method_exists($cache->getStore(), 'tags')) {
-            $this->storage = $cache->tags($tags);
+            $this->storage = new Storage\Persistent($cache->tags($tags), $tags);
         }
 
         return $this;
@@ -90,8 +88,7 @@ class Repository
     public function forever(string $key, callable $callback): self
     {
         $this->remembers[$key] = 'forever';
-
-        return $this->register($key, $callback, true);
+        return $this->register($key, $callback);
     }
 
     /**
@@ -115,11 +112,10 @@ class Repository
      *
      * @param  string  $key
      * @param  callable  $callback
-     * @param  bool  $persistent
      *
      * @return $this
      */
-    public function register(string $key, callable $callback, bool $persistent = false): self
+    public function register(string $key, callable $callback): self
     {
         $this->collections[$key] = $callback;
 
@@ -142,18 +138,13 @@ class Repository
         }
 
         $callback = $this->getCacheResolver($key);
-
         $duration = $this->remembers[$key] ?? null;
 
-        if (! is_null($this->storage) && ! is_null($duration)) {
-            if ($duration === 'forever') {
-                return $this->storage->rememberForever($key, $callback);
-            }
-
+        if (! is_null($this->storage)) {
             return $this->storage->remember($key, $duration, $callback);
         }
 
-        return $this->memory->sear($key, $callback);
+        return $this->memory->remember($key, $duration, $callback);
     }
 
     /**
@@ -181,11 +172,7 @@ class Repository
      */
     public function flush(): self
     {
-        $keys = array_keys($this->collections);
-
-        foreach ($keys as $key) {
-            $this->memory->forget($key);
-        }
+        $this->memory->flush();
 
         if (! is_null($this->storage)) {
             $this->storage->flush();
