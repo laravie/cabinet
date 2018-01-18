@@ -9,8 +9,16 @@ use Illuminate\Cache\Repository as CacheRepository;
 
 class Runtime implements Storage
 {
+    /**
+     * The runtime cache instance.
+     *
+     * @var \Illuminate\Cache\Repository
+     */
     protected $cache;
 
+    /**
+     * Construct a new runtime storage.
+     */
     public function __construct()
     {
         $this->cache = new CacheRepository(new ArrayStore());

@@ -37,6 +37,13 @@ class Repository
     protected $collections = [];
 
     /**
+     * List of tags.
+     *
+     * @var array
+     */
+    protected $tags = [];
+
+    /**
      * Construct a new eloquent repository.
      *
      * @param \Illuminate\Database\Eloquent\Model  $eloquent
@@ -45,6 +52,7 @@ class Repository
     {
         $this->eloquent = $eloquent;
         $this->memory = new Storage\Runtime();
+        $this->tags = $this->resolveTags($eloquent);
     }
 
     /**
@@ -56,15 +64,8 @@ class Repository
      */
     public function setStorage(CacheContract $cache): self
     {
-        $model = $this->eloquent;
-
-        $tags = [
-            sprintf('cabinet-%s:%s-%s', $model->getConnectionName(), $model->getTable(), $model->getKey()),
-            sprintf('cabinet-%s-%s', $model->getTable(), $model->getKey()),
-        ];
-
         if (method_exists($cache->getStore(), 'tags')) {
-            $this->storage = new Storage\Persistent($cache->tags($tags), $tags);
+            $this->storage = new Storage\Persistent($cache, $this->tags);
         }
 
         return $this;
@@ -108,7 +109,7 @@ class Repository
      */
     public function register(string $key, callable $callback, $duration = null): self
     {
-        $this->collections[$key] = [$callback, $duration];
+        $this->collections[$key] = Item::create($this->eloquent, $key, $callback, $duration);
 
         return $this;
     }
@@ -124,8 +125,26 @@ class Repository
      */
     public function get(string $key)
     {
-        list($duration, $callback) = $this->findCollection($key);
+        $item = $this->collections[$key] ?? null;
 
+        if (! $item instanceof Item) {
+            throw new InvalidArgumentException("Requested [{$key}] is not registered!");
+        }
+
+        return $this->getFromStorage($key, $item->get('duration'), $item->get('resolver'));
+    }
+
+    /**
+     * Get item value from storage.
+     *
+     * @param  string  $key
+     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $duration
+     * @param  callable  $callback
+     *
+     * @return mixed
+     */
+    protected function getFromStorage(string $key, $duration, callable $callback)
+    {
         if (is_null($this->storage) || is_null($duration)) {
             return $this->memory->remember($key, $duration, $callback);
         }
@@ -168,26 +187,17 @@ class Repository
     }
 
     /**
-     * Get cache findCollectionr.
+     * Resolve tags for model.
      *
-     * @param  string  $key
+     * @param  \Illuminate\Database\Eloquent\Model  $eloquent
      *
      * @return array
-     *
-     * @throws \InvalidArgumentException
      */
-    protected function findCollection(string $key): array
+    private function resolveTags(Model $eloquent): array
     {
-        if (! array_key_exists($key, $this->collections)) {
-            throw new InvalidArgumentException("Requested [{$key}] is not registered!");
-        }
-
-
         return [
-            $this->collections[$key][1],
-            function () use ($key) {
-                return $this->collections[$key][0]($this->eloquent);
-            },
+            sprintf('cabinet-%s:%s-%s', $eloquent->getConnectionName(), $eloquent->getTable(), $eloquent->getKey()),
+            sprintf('cabinet-%s-%s', $eloquent->getTable(), $eloquent->getKey()),
         ];
     }
 }

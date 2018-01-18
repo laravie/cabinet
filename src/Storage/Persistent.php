@@ -5,16 +5,33 @@ namespace Laravie\Cabinet\Storage;
 use Closure;
 use Illuminate\Cache\TaggedCache;
 use Laravie\Cabinet\Contracts\Storage;
+use Illuminate\Contracts\Cache\Repository as CacheContract;
 
 class Persistent implements Storage
 {
+    /**
+     * The tagged cache instance.
+     *
+     * @var \Illuminate\Cache\TaggedCache
+     */
     protected $cache;
 
+    /**
+     * List of tags.
+     *
+     * @var array
+     */
     protected $tags = [];
 
-    public function __construct(TaggedCache $cache, array $tags)
+    /**
+     * Construct a new storage.
+     *
+     * @param \Illuminate\Contracts\Cache\Repository  $cache
+     * @param array  $tags
+     */
+    public function __construct(CacheContract $cache, array $tags)
     {
-        $this->cache = $cache;
+        $this->cache = $cache->tags($tags);
         $this->tags = $tags;
     }
 
