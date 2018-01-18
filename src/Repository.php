@@ -51,7 +51,6 @@ class Repository
     public function __construct(Model $eloquent)
     {
         $this->eloquent = $eloquent;
-        $this->memory = new Storage\Runtime();
         $this->tags = $this->resolveTags($eloquent);
     }
 
@@ -146,7 +145,7 @@ class Repository
     protected function getFromStorage(string $key, $duration, callable $callback)
     {
         if (is_null($this->storage) || is_null($duration)) {
-            return $this->memory->remember($key, $duration, $callback);
+            return $this->getMemory()->remember($key, $duration, $callback);
         }
 
         return $this->storage->remember($key, $duration, $callback);
@@ -161,7 +160,7 @@ class Repository
      */
     public function forget(string $key): self
     {
-        $this->memory->forget($key);
+        $this->getMemory()->forget($key);
 
         if (! is_null($this->storage)) {
             $this->storage->forget($key);
@@ -171,13 +170,27 @@ class Repository
     }
 
     /**
+     * Get memory instance.
+     *
+     * @return \Laravie\Cabinet\Storage\Runtime
+     */
+    protected function getMemory(): Storage\Runtime
+    {
+        if (! isset($this->memory)) {
+            $this->memory = new Storage\Runtime($this->tags);
+        }
+
+        return $this->memory;
+    }
+
+    /**
      * Flush all keys.
      *
      * @return $this
      */
     public function flush(): self
     {
-        $this->memory->flush();
+        $this->getMemory()->flush();
 
         if (! is_null($this->storage)) {
             $this->storage->flush();

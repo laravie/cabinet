@@ -10,6 +10,13 @@ use Illuminate\Cache\Repository as CacheRepository;
 class Runtime implements Storage
 {
     /**
+     * List of tags.
+     *
+     * @var array
+     */
+    protected $tags = [];
+
+    /**
      * The runtime cache instance.
      *
      * @var \Illuminate\Cache\Repository
@@ -18,10 +25,13 @@ class Runtime implements Storage
 
     /**
      * Construct a new runtime storage.
+     *
+     * @param array  $tags
      */
-    public function __construct()
+    public function __construct(array $tags)
     {
-        $this->cache = new CacheRepository(new ArrayStore());
+        $this->cache = (new CacheRepository(new ArrayStore()))->tags($tags);
+        $this->tags = $tags;
     }
 
     /**
