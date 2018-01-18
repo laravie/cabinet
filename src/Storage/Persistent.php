@@ -29,7 +29,7 @@ class Persistent implements Storage
      */
     public function remember(string $key, $duration, Closure $callback)
     {
-        if ($duration === 'forever') {
+        if (is_null($duration) || $duration === 'forever') {
             return $this->cache->rememberForever($key, $callback);
         }
 

@@ -37,13 +37,6 @@ class Repository
     protected $collections = [];
 
     /**
-     * Persistents collection.
-     *
-     * @var array
-     */
-    protected $remembers = [];
-
-    /**
      * Construct a new eloquent repository.
      *
      * @param \Illuminate\Database\Eloquent\Model  $eloquent
@@ -87,8 +80,7 @@ class Repository
      */
     public function forever(string $key, callable $callback): self
     {
-        $this->remembers[$key] = 'forever';
-        return $this->register($key, $callback);
+        return $this->register($key, $callback, 'forever');
     }
 
     /**
@@ -102,9 +94,7 @@ class Repository
      */
     public function remember(string $key, $minutes, callable $callback): self
     {
-        $this->remembers[$key] = $minutes;
-
-        return $this->register($key, $callback);
+        return $this->register($key, $callback, $minutes);
     }
 
     /**
@@ -112,12 +102,13 @@ class Repository
      *
      * @param  string  $key
      * @param  callable  $callback
+     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $duration
      *
      * @return $this
      */
-    public function register(string $key, callable $callback): self
+    public function register(string $key, callable $callback, $duration = null): self
     {
-        $this->collections[$key] = $callback;
+        $this->collections[$key] = [$callback, $duration];
 
         return $this;
     }
@@ -133,18 +124,13 @@ class Repository
      */
     public function get(string $key)
     {
-        if (! array_key_exists($key, $this->collections)) {
-            throw new InvalidArgumentException("Requested [{$key}] is not registered!");
+        list($duration, $callback) = $this->findCollection($key);
+
+        if (is_null($this->storage) || is_null($duration)) {
+            return $this->memory->remember($key, $duration, $callback);
         }
 
-        $callback = $this->getCacheResolver($key);
-        $duration = $this->remembers[$key] ?? null;
-
-        if (! is_null($this->storage)) {
-            return $this->storage->remember($key, $duration, $callback);
-        }
-
-        return $this->memory->remember($key, $duration, $callback);
+        return $this->storage->remember($key, $duration, $callback);
     }
 
     /**
@@ -182,16 +168,26 @@ class Repository
     }
 
     /**
-     * Get cache resolver.
+     * Get cache findCollectionr.
      *
      * @param  string  $key
      *
-     * @return callable
+     * @return array
+     *
+     * @throws \InvalidArgumentException
      */
-    protected function getCacheResolver(string $key): callable
+    protected function findCollection(string $key): array
     {
-        return function () use ($key) {
-            return $this->collections[$key]($this->eloquent);
-        };
+        if (! array_key_exists($key, $this->collections)) {
+            throw new InvalidArgumentException("Requested [{$key}] is not registered!");
+        }
+
+
+        return [
+            $this->collections[$key][1],
+            function () use ($key) {
+                return $this->collections[$key][0]($this->eloquent);
+            },
+        ];
     }
 }
