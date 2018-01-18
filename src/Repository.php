@@ -143,7 +143,7 @@ class Repository
 
         $callback = $this->getCacheResolver($key);
 
-        $duration = isset($this->remembers[$key]) ? $this->remembers[$key] : null;
+        $duration = $this->remembers[$key] ?? null;
 
         if (! is_null($this->storage) && ! is_null($duration)) {
             if ($duration === 'forever') {
