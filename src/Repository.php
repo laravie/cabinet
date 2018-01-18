@@ -91,7 +91,7 @@ class Repository
     {
         $this->remembers[$key] = 'forever';
 
-        return $this->register($key, $callback, true);
+        return $this->register($key, $callback);
     }
 
     /**
@@ -115,11 +115,10 @@ class Repository
      *
      * @param  string  $key
      * @param  callable  $callback
-     * @param  bool  $persistent
      *
      * @return $this
      */
-    public function register(string $key, callable $callback, bool $persistent = false): self
+    public function register(string $key, callable $callback): self
     {
         $this->collections[$key] = $callback;
 
