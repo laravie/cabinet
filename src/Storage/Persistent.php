@@ -3,7 +3,6 @@
 namespace Laravie\Cabinet\Storage;
 
 use Closure;
-use Illuminate\Cache\TaggedCache;
 use Laravie\Cabinet\Contracts\Storage;
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 

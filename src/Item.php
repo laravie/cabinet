@@ -21,11 +21,24 @@ class Item extends Fluent
     {
         return new static([
             'key' => $key,
-            'resolver' => function () use ($callback, $eloquent) {
-                return $callback($eloquent);
-            },
+            'resolver' => static::createCacheResolver($eloquent, $callback),
             'duration' => $duration,
             'content' => null,
         ]);
+    }
+
+    /**
+     * Create cache resolver.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $eloquent
+     * @param  callable  $callback
+     *
+     * @return callable
+     */
+    protected static function createCacheResolver(Model $model, callable $callback): callable
+    {
+        return function () use ($model, $callback) {
+            return $callback($model);
+        };
     }
 }
