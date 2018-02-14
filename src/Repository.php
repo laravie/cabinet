@@ -118,9 +118,9 @@ class Repository
      *
      * @param  string $key
      *
-     * @return mixed
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function get(string $key)
     {

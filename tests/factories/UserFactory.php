@@ -14,7 +14,6 @@ use Laravie\Cabinet\Tests\Stubs\User;
 |
 */
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(User::class, function (Generator $faker) {
     static $password;
 
