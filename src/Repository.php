@@ -61,7 +61,7 @@ class Repository
      *
      * @return $this
      */
-    public function setStorage(CacheContract $cache): self
+    public function setStorage(CacheContract $cache)
     {
         if (method_exists($cache->getStore(), 'tags')) {
             $this->storage = new Storage\Persistent($cache, $this->tags);
@@ -78,7 +78,7 @@ class Repository
      *
      * @return $this
      */
-    public function forever(string $key, callable $callback): self
+    public function forever(string $key, callable $callback)
     {
         return $this->register($key, $callback, 'forever');
     }
@@ -92,7 +92,7 @@ class Repository
      *
      * @return $this
      */
-    public function remember(string $key, $minutes, callable $callback): self
+    public function remember(string $key, $minutes, callable $callback)
     {
         return $this->register($key, $callback, $minutes);
     }
@@ -106,7 +106,7 @@ class Repository
      *
      * @return $this
      */
-    public function register(string $key, callable $callback, $duration = null): self
+    public function register(string $key, callable $callback, $duration = null)
     {
         $this->collections[$key] = Item::create($this->eloquent, $key, $callback, $duration);
 
@@ -158,7 +158,7 @@ class Repository
      *
      * @return $this
      */
-    public function forget(string $key): self
+    public function forget(string $key)
     {
         $this->getMemory()->forget($key);
 
@@ -188,7 +188,7 @@ class Repository
      *
      * @return $this
      */
-    public function flush(): self
+    public function flush()
     {
         $this->getMemory()->flush();
 
