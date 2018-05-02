@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/cabinet`.
 
+## 2.0.1
+
+Released: 2018-05-02
+
+### Changes
+
+* return `self` should only be used when method is marked as `final`.
+
 ## 2.0.0
 
 Released: 2018-01-22
