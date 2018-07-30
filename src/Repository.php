@@ -2,6 +2,8 @@
 
 namespace Laravie\Cabinet;
 
+use Exception;
+use Throwable;
 use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Cache\Repository as CacheContract;
@@ -146,6 +148,12 @@ class Repository
     {
         if (is_null($this->storage) || is_null($duration)) {
             return $this->getMemory()->remember($key, $duration, $callback);
+        }
+
+        try {
+            return $this->storage->remember($key, $duration, $callback);
+        } catch (Exception | Throwable $e) {
+            $this->storage->forget($key);
         }
 
         return $this->storage->remember($key, $duration, $callback);
