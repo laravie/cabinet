@@ -152,9 +152,7 @@ class Repository
 
         try {
             return $this->storage->remember($key, $duration, $callback);
-        } catch (Exception $e) {
-            $this->storage->forget($key);
-        } catch (Throwable $e) {
+        } catch (Exception | Throwable $e) {
             $this->storage->forget($key);
         }
 
