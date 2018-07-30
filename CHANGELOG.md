@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/cabinet`.
 
+## 2.0.3
+
+Released: 2018-07-30
+
+### Fixes
+
+* Fixes compatibility with PHP 7.0.+.
+
 ## 2.0.2
 
 Released: 2018-07-30
