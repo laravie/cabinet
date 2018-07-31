@@ -2,6 +2,15 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/cabinet`.
 
+## 2.1.0
+
+Released: 2018-07-31
+
+### Changes
+
+* Bump minimum PHP version to 7.1.
+* Bump minimum Laravel Framework to 5.6.+.
+
 ## 2.0.3
 
 Released: 2018-07-30
