@@ -16,6 +16,12 @@ env:
     - laravel=5.6.*
     - laravel=5.7.*
     - laravel=dev-master
+    - setup=lowest laravel=5.6.*
+    - setup=lowest laravel=5.7.*
+    - setup=lowest laravel=dev-master
+    - setup=stable laravel=5.6.*
+    - setup=stable laravel=5.7.*
+    - setup=stable laravel=dev-master
 
 services:
   - redis-server
@@ -26,10 +32,10 @@ before_install:
 
 before_script:
   - composer config discard-changes true
-  - if [[ $setup = 'basic' ]]; then travis_retry composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest; fi
-  - if [[ $setup = 'stable' ]]; then travis_retry composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest --prefer-stable; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest --prefer-stable --prefer-lowest; fi
-  - if [[ $setup = 'coveralls' ]]; then travis_retry composer require "laravel/framework=${laravel}" "php-coveralls/php-coveralls=^2.1" --prefer-dist --no-interaction --dev; fi
+  - travis_retry composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable --prefer-lowest; fi
+  - if [[ $setup = 'coveralls' ]]; then travis_retry composer require "php-coveralls/php-coveralls=^2.1" --prefer-dist --no-interaction --dev; fi
 
 script:
   - if [[ $coverage = 'yes' ]]; then vendor/bin/phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml; fi
@@ -40,21 +46,12 @@ after_script:
 
 matrix:
   include:
-    - env:
-        - setup=lowest
-        - laravel=5.6.*
-    - env:
-        - setup=stable
-        - laravel=5.6.*
-    - env:
-        - setup=lowest
-        - laravel=5.7.*
-    - env:
-        - setup=stable
-        - laravel=5.7.*
     - php: 7.1
       env: setup=coveralls coverage=yes laravel=5.6.*
   allow_failures:
     - php: nightly
+    - env: laravel=dev-master
+    - env: setup=lowest laravel=dev-master
+    - env: setup=stable laravel=dev-master
     - env: setup=coveralls coverage=yes laravel=5.6.*
   fast_finish: true
