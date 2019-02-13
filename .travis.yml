@@ -6,7 +6,6 @@ php:
   - 7.1
   - 7.2
   - 7.3
-  - nightly
 
 env:
   global:
@@ -32,9 +31,9 @@ services:
 before_install:
   - printf "\n" | pecl install -f redis
   - travis_retry composer self-update
+  - composer config discard-changes true
 
 before_script:
-  - composer config discard-changes true
   - travis_retry composer require "laravel/framework=${laravel}" --prefer-dist --no-interaction --no-suggest
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable --prefer-lowest; fi
@@ -52,7 +51,6 @@ matrix:
     - php: 7.1
       env: setup=coveralls coverage=yes laravel=5.6.*
   allow_failures:
-    - php: nightly
     - env: laravel=dev-master
     - env: setup=lowest laravel=dev-master
     - env: setup=stable laravel=dev-master
