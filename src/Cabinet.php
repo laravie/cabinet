@@ -24,12 +24,12 @@ trait Cabinet
         if (! isset($this->cabinet)) {
             $this->cabinet = new Repository($this);
 
-            if (method_exists($this, 'onCabinet')) {
+            if (\method_exists($this, 'onCabinet')) {
                 $this->onCabinet($this->cabinet);
             }
         }
 
-        if (! is_null($key)) {
+        if (! \is_null($key)) {
             return $this->cabinet->get($key, $default);
         }
 

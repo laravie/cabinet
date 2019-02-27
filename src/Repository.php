@@ -65,7 +65,7 @@ class Repository
      */
     public function setStorage(CacheContract $cache)
     {
-        if (method_exists($cache->getStore(), 'tags')) {
+        if (\method_exists($cache->getStore(), 'tags')) {
             $this->storage = new Storage\Persistent($cache, $this->tags);
         }
 
@@ -146,7 +146,7 @@ class Repository
      */
     protected function getFromStorage(string $key, $duration, callable $callback)
     {
-        if (is_null($this->storage) || is_null($duration)) {
+        if (\is_null($this->storage) || \is_null($duration)) {
             return $this->getMemory()->remember($key, $duration, $callback);
         }
 
@@ -170,7 +170,7 @@ class Repository
     {
         $this->getMemory()->forget($key);
 
-        if (! is_null($this->storage)) {
+        if (! \is_null($this->storage)) {
             $this->storage->forget($key);
         }
 
@@ -200,7 +200,7 @@ class Repository
     {
         $this->getMemory()->flush();
 
-        if (! is_null($this->storage)) {
+        if (! \is_null($this->storage)) {
             $this->storage->flush();
         }
 
@@ -217,8 +217,8 @@ class Repository
     private function resolveTags(Model $eloquent): array
     {
         return [
-            sprintf('cabinet-%s:%s-%s', $eloquent->getConnectionName(), $eloquent->getTable(), $eloquent->getKey()),
-            sprintf('cabinet-%s-%s', $eloquent->getTable(), $eloquent->getKey()),
+            \sprintf('cabinet-%s:%s-%s', $eloquent->getConnectionName(), $eloquent->getTable(), $eloquent->getKey()),
+            \sprintf('cabinet-%s-%s', $eloquent->getTable(), $eloquent->getKey()),
         ];
     }
 }
