@@ -14,14 +14,12 @@ env:
     - laravel=5.7.*
     - laravel=5.8.*
     - laravel=dev-master
-    - setup=lowest laravel=5.6.*
-    - setup=lowest laravel=5.7.*
-    - setup=lowest laravel=5.8.*
-    - setup=lowest laravel=dev-master
     - setup=stable laravel=5.6.*
     - setup=stable laravel=5.7.*
     - setup=stable laravel=5.8.*
     - setup=stable laravel=dev-master
+    - setup=lowest laravel=5.8.*
+    - setup=lowest laravel=dev-master
 
 services:
   - redis-server
@@ -53,17 +51,13 @@ matrix:
     - php: 7.1
       env: laravel=5.8.*
     - php: 7.1
-      env: setup=lowest laravel=5.6.*
-    - php: 7.1
-      env: setup=lowest laravel=5.7.*
-    - php: 7.1
-      env: setup=lowest laravel=5.8.*
-    - php: 7.1
       env: setup=stable laravel=5.6.*
     - php: 7.1
       env: setup=stable laravel=5.7.*
     - php: 7.1
       env: setup=stable laravel=5.8.*
+    - php: 7.1
+      env: setup=lowest laravel=5.8.*
     - php: 7.1
       env: setup=coveralls coverage=yes laravel=5.6.*
   allow_failures:
