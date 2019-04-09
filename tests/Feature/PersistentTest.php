@@ -68,8 +68,6 @@ class PersistentTest extends TestCase
 
         $different = User::find($user->getKey());
 
-        $this->assertEquals($user->cabinet('now')->toDateTimeString(), $lastRead);
-        $this->assertNotEquals($different->cabinet('now')->toDateTimeString(), $lastRead);
         $this->assertEquals($different->cabinet('last_read'), $lastRead);
 
         $tags = [
