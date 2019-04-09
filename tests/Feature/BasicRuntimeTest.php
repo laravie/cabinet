@@ -43,6 +43,18 @@ class BasicRuntimeTest extends TestCase
         $this->assertNotSame($user->cabinet('now'), $now);
     }
 
+     /** @test */
+    public function it_can_flush_known_value_and_retrieve_new_value()
+    {
+        $user = factory(User::class)->create();
+
+        $now = $user->cabinet('now');
+
+        $user->cabinet()->flush();
+
+        $this->assertNotSame($user->cabinet('now'), $now);
+    }
+
     /**
      * @test
      * @expectedException \InvalidArgumentException
