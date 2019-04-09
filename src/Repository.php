@@ -136,7 +136,7 @@ class Repository
     }
 
     /**
-     * Get fresh from storage
+     * Get fresh from storage.
      *
      * @param  string  $key
      *
