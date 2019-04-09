@@ -38,6 +38,8 @@ class BasicRuntimeTest extends TestCase
 
         $now = $user->cabinet('now');
 
+        $this->assertSame($user->cabinet('now'), $now);
+
         $user->cabinet()->forget('now');
 
         $this->assertNotSame($user->cabinet('now'), $now);
@@ -50,9 +52,23 @@ class BasicRuntimeTest extends TestCase
 
         $now = $user->cabinet('now');
 
+        $this->assertSame($user->cabinet('now'), $now);
+
         $user->cabinet()->flush();
 
         $this->assertNotSame($user->cabinet('now'), $now);
+    }
+
+    /** @test */
+    public function it_can_get_fresh_from_known_value()
+    {
+        $user = factory(User::class)->create();
+
+        $now = $user->cabinet('now');
+
+        $this->assertSame($user->cabinet('now'), $now);
+
+        $this->assertNotSame($user->cabinet()->fresh('now'), $now);
     }
 
     /** @test */

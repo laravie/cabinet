@@ -24,6 +24,8 @@ class PersistentTest extends TestCase
 
         $lastRead = $user->cabinet('last_read');
 
+        $this->assertSame($user->cabinet('last_read'), $lastRead);
+
         $user->cabinet()->forget('now')->forget('last_read');
 
         sleep(1);
@@ -38,11 +40,27 @@ class PersistentTest extends TestCase
 
         $lastRead = $user->cabinet('last_read');
 
+        $this->assertSame($user->cabinet('last_read'), $lastRead);
+
         $user->cabinet()->flush();
 
         sleep(1);
 
         $this->assertNotSame($user->cabinet('last_read'), $lastRead);
+    }
+
+    /** @test */
+    public function it_can_get_fresh_from_known_value()
+    {
+        $user = factory(User::class)->create();
+
+        $lastRead = $user->cabinet('last_read');
+
+        $this->assertSame($user->cabinet('last_read'), $lastRead);
+
+        sleep(1);
+
+        $this->assertNotSame($user->cabinet()->fresh('last_read'), $lastRead);
     }
 
     /** @test */
