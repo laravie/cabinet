@@ -13,16 +13,16 @@ class Item extends Fluent
      * @param  \Illuminate\Database\Eloquent\Model  $eloquent
      * @param  string. $key
      * @param  callable  $callback
-     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $duration
+     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $ttl
      *
      * @return static
      */
-    public static function create(Model $eloquent, string $key, callable $callback, $duration = null): Item
+    public static function create(Model $eloquent, string $key, callable $callback, $ttl = null): Item
     {
         return new static([
             'key' => $key,
             'resolver' => static::createCacheResolver($eloquent, $callback),
-            'duration' => $duration,
+            'ttl' => $ttl,
             'content' => null,
         ]);
     }

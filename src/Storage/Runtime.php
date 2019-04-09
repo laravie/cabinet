@@ -38,12 +38,12 @@ class Runtime implements Storage
      * Get an item from the cache, or store the default value.
      *
      * @param  string  $key
-     * @param  \DateTimeInterface|\DateInterval|float|int|string  $duration
+     * @param  \DateTimeInterface|\DateInterval|float|int|string  $ttl
      * @param  \Closure  $callback
      *
      * @return mixed
      */
-    public function remember(string $key, $duration, Closure $callback)
+    public function remember(string $key, $ttl, Closure $callback)
     {
         return $this->cache->sear($key, $callback);
     }

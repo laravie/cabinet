@@ -38,18 +38,18 @@ class Persistent implements Storage
      * Get an item from the cache, or store the default value.
      *
      * @param  string  $key
-     * @param  \DateTimeInterface|\DateInterval|float|int|string  $duration
+     * @param  \DateTimeInterface|\DateInterval|float|int|string  $ttl
      * @param  \Closure  $callback
      *
      * @return mixed
      */
-    public function remember(string $key, $duration, Closure $callback)
+    public function remember(string $key, $ttl, Closure $callback)
     {
-        if (\is_null($duration) || $duration === 'forever') {
+        if (\is_null($ttl) || $ttl === 'forever') {
             return $this->cache->rememberForever($key, $callback);
         }
 
-        return $this->cache->remember($key, $duration, $callback);
+        return $this->cache->remember($key, $ttl, $callback);
     }
 
     /**

@@ -89,14 +89,14 @@ class Repository
      * Register new persistent cache data.
      *
      * @param  string  $key
-     * @param  \DateTimeInterface|\DateInterval|float|int  $minutes
+     * @param  \DateTimeInterface|\DateInterval|float|int  $ttl
      * @param  callable  $callback
      *
      * @return $this
      */
-    public function remember(string $key, $minutes, callable $callback)
+    public function remember(string $key, $ttl, callable $callback)
     {
-        return $this->register($key, $callback, $minutes);
+        return $this->register($key, $callback, $ttl);
     }
 
     /**
@@ -104,13 +104,13 @@ class Repository
      *
      * @param  string  $key
      * @param  callable  $callback
-     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $duration
+     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $ttl
      *
      * @return $this
      */
-    public function register(string $key, callable $callback, $duration = null)
+    public function register(string $key, callable $callback, $ttl = null)
     {
-        $this->collections[$key] = Item::create($this->eloquent, $key, $callback, $duration);
+        $this->collections[$key] = Item::create($this->eloquent, $key, $callback, $ttl);
 
         return $this;
     }
@@ -132,7 +132,7 @@ class Repository
             throw new InvalidArgumentException("Requested [{$key}] is not registered!");
         }
 
-        return $this->getFromStorage($key, $item->get('duration'), $item->get('resolver'));
+        return $this->getFromStorage($key, $item->get('ttl'), $item->get('resolver'));
     }
 
     /**
@@ -153,24 +153,24 @@ class Repository
      * Get item value from storage.
      *
      * @param  string  $key
-     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $duration
+     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $ttl
      * @param  callable  $callback
      *
      * @return mixed
      */
-    protected function getFromStorage(string $key, $duration, callable $callback)
+    protected function getFromStorage(string $key, $ttl, callable $callback)
     {
-        if (\is_null($this->storage) || \is_null($duration)) {
-            return $this->getMemory()->remember($key, $duration, $callback);
+        if (\is_null($this->storage) || \is_null($ttl)) {
+            return $this->getMemory()->remember($key, $ttl, $callback);
         }
 
         try {
-            return $this->storage->remember($key, $duration, $callback);
+            return $this->storage->remember($key, $ttl, $callback);
         } catch (Exception | Throwable $e) {
             $this->storage->forget($key);
         }
 
-        return $this->storage->remember($key, $duration, $callback);
+        return $this->storage->remember($key, $ttl, $callback);
     }
 
     /**
