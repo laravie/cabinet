@@ -118,7 +118,7 @@ class Repository
     /**
      * Get cache data.
      *
-     * @param  string $key
+     * @param  string  $key
      *
      * @throws \InvalidArgumentException
      *
@@ -133,6 +133,20 @@ class Repository
         }
 
         return $this->getFromStorage($key, $item->get('duration'), $item->get('resolver'));
+    }
+
+    /**
+     * Get fresh from storage
+     *
+     * @param  string  $key
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return mixed
+     */
+    public function fresh(string $key)
+    {
+        return $this->forget($key)->get($key);
     }
 
     /**
