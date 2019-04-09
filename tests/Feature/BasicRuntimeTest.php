@@ -43,13 +43,12 @@ class BasicRuntimeTest extends TestCase
         $this->assertNotSame($user->cabinet('now'), $now);
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Requested [enemies] is not registered!
-     */
+    /** @test */
     public function it_cant_access_unknown_cache_key()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Requested [enemies] is not registered!');
+
         $user = factory(User::class)->create();
 
         $user->cabinet('enemies');
