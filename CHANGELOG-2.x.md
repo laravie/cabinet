@@ -2,6 +2,19 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/cabinet`.
 
+## 2.2.0
+
+Released: 2019-04-15
+
+### Added
+
+* Added `Laravie\Cabinet\Repository::fresh()` helper method to forget knwon key and get fresh value from storage.
+
+### Changes
+
+* Remove support for Laravel Framework v5.7 and below.
+* Rename `$duration` to `$ttl`.
+
 ## 2.1.2
 
 Released: 2019-03-29
