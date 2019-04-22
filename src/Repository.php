@@ -100,7 +100,7 @@ class Repository
     }
 
     /**
-     * Register new in-memory cache data.
+     * Register new cache data.
      *
      * @param  string  $key
      * @param  callable  $callback
@@ -133,6 +133,22 @@ class Repository
         }
 
         return $this->getFromStorage($key, $item->get('ttl'), $item->get('resolver'));
+    }
+
+    /**
+     * Share cache data and return the values.
+     *
+     * @param  string  $key
+     * @param  callable  $callback
+     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $ttl
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return mixed
+     */
+    public function share(string $key, callable $callback, $ttl = null)
+    {
+        return $this->register($key, $callback, $ttl)->get($key);
     }
 
     /**
