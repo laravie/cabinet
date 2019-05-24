@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/cabinet`.
 
+## 2.2.1
+
+Released: 2019-05-24
+
+### Added
+
+* Added `Laravie\Cabinet\Repository::share()` helper method to register and get the value.
+
 ## 2.2.0
 
 Released: 2019-04-15
