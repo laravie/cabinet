@@ -139,14 +139,14 @@ class Repository
      * Share cache data and return the values.
      *
      * @param  string  $key
-     * @param  callable  $callback
+     * @param  callable|mixed  $callback
      * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $ttl
      *
      * @throws \InvalidArgumentException
      *
      * @return mixed
      */
-    public function share(string $key, callable $callback, $ttl = null)
+    public function share(string $key, $callback, $ttl = null)
     {
         return $this->register($key, $callback, $ttl)->get($key);
     }
