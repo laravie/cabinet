@@ -37,7 +37,7 @@ class Item extends Fluent
      */
     protected static function createCacheResolver(Model $model, callable $callback): callable
     {
-        return function () use ($model, $callback) {
+        return static function () use ($model, $callback) {
             return $callback($model);
         };
     }
