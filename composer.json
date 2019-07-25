@@ -20,18 +20,18 @@
         }
     },
     "require": {
-        "php": ">=7.1",
-        "illuminate/cache": "^5.8",
-        "illuminate/database": "^5.8"
+        "php": ">=7.2",
+        "illuminate/cache": "dev-master",
+        "illuminate/database": "dev-master"
     },
     "require-dev": {
         "mockery/mockery": "^1.2",
-        "orchestra/testbench": "^3.8",
+        "orchestra/testbench": "^4.0",
         "predis/predis": "^1.1"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.3-dev"
+            "dev-master": "3.0-dev"
         }
     },
     "config": {
