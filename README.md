@@ -31,9 +31,9 @@ Above installation can also be simplify by using the following command:
 
 ## Usages
 
-### Setup Cabinet to an Eloquent Model
+### Setup Cabinet on a Model
 
-You first need to add `Laravie\Cabinet\Cabinet` to an Eloquent Model such as:
+You first need to add `Laravie\Cabinet\Cabinet` on an Eloquent Model such as:
 
 ```php
 <?php
@@ -76,4 +76,70 @@ class User extends Authenticatable
         $cabinet->setStorage(resolve('cache.store'));
     }
 }
+```
+
+### Storing data
+
+#### Runtime
+
+```php
+Laravie\Cabinet\Repository::share(string $key, callable $callback);
+```
+
+The method allows a value to be register for `$key` using a closure/callable `$callback`.
+
+```php
+$user->cabinet()->share('birthday', static function ($user) {
+    return now()->diffInDays($user->birthdate);
+});
+```
+
+### Persistent with TTL
+
+```php
+Laravie\Cabinet\Repository::share(string $key, callable $callback, $ttl = null);
+```
+
+By using the same code as **Runtime** and adding the 3rd parameter `$ttl` (in seconds), Cabinet will attempt to store the data in cache for `$ttl` seconds.
+
+```php
+$user->cabinet()->share('birthday', static function ($user) {
+    return now()->diffInDays($user->birthdate);
+}, 60);
+```
+
+#### Forever
+
+```php
+Laravie\Cabinet\Repository::forever(string $key, callable $callback);
+```
+
+You can either use `forever` as the 3rd parameter using `share` or use `forever` to cache the value indefinitely.
+
+```php
+$user->cabinet()->share('birthday', static function ($user) {
+    return now()->diffInDays($user->birthdate);
+}, 'forever');
+
+// or
+
+$user->cabinet->forever('birthday', static function ($user) {
+    return now()->diffInDays($user->birthdate);
+})
+```
+
+### Retrieving the data
+
+```php
+Laravie\Cabinet\Repository::get(string $key);
+```
+
+Retrieving the data using `get` method.
+
+```php
+$user->cabinet()->get('birthday');
+
+// or
+
+$user->cabinet('birthday');
 ```
