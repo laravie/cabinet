@@ -24,6 +24,17 @@ class BasicRuntimeTest extends TestCase
         $this->assertSame('bar', $user->cabinet()->get('foo'));
     }
 
+    /** @test */
+    public function it_will_not_expose_cache_value_between_model()
+    {
+        $users = factory(User::class, 2)->create();
+
+        $this->assertNotSame($users[1]->cabinet(), $users[0]->cabinet());
+        $this->assertNotSame($users[1]->cabinet('id'), $users[0]->cabinet('id'));
+        $this->assertSame("user:{$users[0]->id}", $users[0]->cabinet('id'));
+        $this->assertSame("user:{$users[1]->id}", $users[1]->cabinet('id'));
+    }
+
 
     /** @test */
     public function it_reused_cached_value_on_each_called()
