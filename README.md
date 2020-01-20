@@ -100,7 +100,7 @@ $user->cabinet()->share('birthday', static function ($user) {
 Laravie\Cabinet\Repository::share(string $key, callable $callback, $ttl = null);
 ```
 
-By using the same code as **Runtime** and adding the 3rd parameter `$ttl` (in seconds), Cabinet will attempt to store the data in cache for `$ttl` seconds.
+By adding the 3rd parameter `$ttl` (in seconds), Cabinet will attempt to store the data in cache for `$ttl` seconds.
 
 ```php
 $user->cabinet()->share('birthday', static function ($user) {
