@@ -44,6 +44,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravie\Cabinet\Cabinet;
 
 class User extends Authenticatable
+{
     use Cabinet;
 }
 ```
@@ -61,6 +62,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravie\Cabinet\Cabinet;
 
 class User extends Authenticatable
+{
     use Cabinet;
 
     /**
