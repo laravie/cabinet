@@ -94,7 +94,7 @@ $user->cabinet()->share('birthday', static function ($user) {
 });
 ```
 
-### Persistent with TTL
+#### Persistent with TTL
 
 ```php
 Laravie\Cabinet\Repository::share(string $key, callable $callback, $ttl = null);
@@ -142,4 +142,28 @@ $user->cabinet()->get('birthday');
 // or
 
 $user->cabinet('birthday');
+```
+
+### Forgetting the data
+
+```php
+Laravie\Cabinet\Repository::forget(string $key);
+```
+
+Forget any data by the given `$key`.
+
+```php
+$user->cabinet()->forget('birthday');
+```
+
+### Flushing all data
+
+```php
+Laravie\Cabinet\Repository::flush();
+```
+
+Flushing all data for an Eloquent model.
+
+```php
+$user->cabinet()->flush();
 ```
