@@ -122,6 +122,22 @@ class Repository
      * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $ttl
      *
      * @return $this
+     *
+     * @deprecated v3.0.0
+     */
+    public function register(string $key, callable $callback, $ttl = null)
+    {
+        return $this->share($key, $callback, $ttl);
+    }
+
+    /**
+     * Share new cache data.
+     *
+     * @param  string  $key
+     * @param  callable  $callback
+     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $ttl
+     *
+     * @return $this
      */
     public function share(string $key, callable $callback, $ttl = null)
     {
