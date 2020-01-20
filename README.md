@@ -68,7 +68,7 @@ class User extends Authenticatable
     /**
      * Configure cabinet for the eloquent model.
      * 
-     * @param  \Laravie\CabinetRepository  $cabinet 
+     * @param  \Laravie\Cabinet\Repository  $cabinet 
      * @return void
      */
     protected function onCabinet($cabinet)
