@@ -1,0 +1,26 @@
+preset: package
+
+namespace: Laravie\Cabinet
+
+paths:
+  src: src
+  resource: resources
+
+factory:
+  path: database/factories
+
+migration:
+  path: database/migrations
+  prefix: ''
+
+console:
+  namespace: Laravie\Cabinet\Console
+
+model:
+  namespace: Laravie\Cabinet
+
+provider:
+  namespace: Laravie\Cabinet\Providers
+
+testing:
+  namespace: Laravie\Cabinet\Tests
