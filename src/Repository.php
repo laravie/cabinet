@@ -89,6 +89,19 @@ class Repository
      * Register new persistent cache data.
      *
      * @param  string  $key
+     * @param  callable  $callback
+     *
+     * @return mixed
+     */
+    public function rememberForever(string $key, callable $callback)
+    {
+        return $this->remember($key, $callback, 'forever');
+    }
+
+    /**
+     * Register new persistent cache data.
+     *
+     * @param  string  $key
      * @param  \DateTimeInterface|\DateInterval|float|int  $ttl
      * @param  callable  $callback
      *
@@ -115,6 +128,20 @@ class Repository
         $this->collections[$key] = Item::create($this->eloquent, $key, $callback, $ttl);
 
         return $this;
+    }
+
+    /**
+     * Register new cache data.
+     *
+     * @param  string  $key
+     * @param  callable  $callback
+     * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $ttl
+     *
+     * @return $this
+     */
+    public function put(string $key, callable $callback, $ttl = null)
+    {
+        return $this->register($key, $callback, $ttl ?? 'forever');
     }
 
     /**
