@@ -20,3 +20,11 @@ To install through composer, simply put the following in your `composer.json` fi
     }
 }
 ```
+
+And then run `composer install` or `composer update` from the terminal.
+
+### Quick Installation
+
+Above installation can also be simplify by using the following command:
+
+    composer require "laravie/cabinet=^3.0"
