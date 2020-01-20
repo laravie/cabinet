@@ -28,3 +28,50 @@ And then run `composer install` or `composer update` from the terminal.
 Above installation can also be simplify by using the following command:
 
     composer require "laravie/cabinet=^3.0"
+
+## Usages
+
+### Setup Cabinet to an Eloquent Model
+
+You first need to add `Laravie\Cabinet\Cabinet` to an Eloquent Model such as:
+
+```php
+<?php
+
+namespace App;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravie\Cabinet\Cabinet;
+
+class User extends Authenticatable
+    use Cabinet;
+}
+```
+
+#### Allow persistent caching
+
+To add persistent caching on the Eloquent, you have to attach a cache storage that support tags (Cache tags are not supported when using the `file` or `database` cache driver).
+
+```php
+<?php
+
+namespace App;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravie\Cabinet\Cabinet;
+
+class User extends Authenticatable
+    use Cabinet;
+
+    /**
+     * Configure cabinet for the eloquent model.
+     * 
+     * @param  \Laravie\CabinetRepository  $cabinet 
+     * @return void
+     */
+    protected function onCabinet($cabinet)
+    {
+        $cabinet->setStorage(resolve('cache.store'));
+    }
+}
+```

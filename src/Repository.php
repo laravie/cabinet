@@ -82,7 +82,7 @@ class Repository
      */
     public function forever(string $key, callable $callback)
     {
-        return $this->register($key, $callback, 'forever');
+        return $this->share($key, $callback, 'forever');
     }
 
     /**
@@ -109,7 +109,7 @@ class Repository
      */
     public function remember(string $key, $ttl, callable $callback)
     {
-        $this->register($key, $callback, $ttl);
+        $this->share($key, $callback, $ttl);
 
         return $this->get($key);
     }
@@ -123,7 +123,7 @@ class Repository
      *
      * @return $this
      */
-    public function register(string $key, callable $callback, $ttl = null)
+    public function share(string $key, callable $callback, $ttl = null)
     {
         $this->collections[$key] = Item::create($this->eloquent, $key, $callback, $ttl);
 
@@ -141,7 +141,7 @@ class Repository
      */
     public function put(string $key, callable $callback, $ttl = null)
     {
-        return $this->register($key, $callback, $ttl ?? 'forever');
+        return $this->share($key, $callback, $ttl ?? 'forever');
     }
 
     /**

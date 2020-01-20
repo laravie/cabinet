@@ -14,7 +14,7 @@ class User extends Authenticatable
     protected function onCabinet(Repository $cabinet)
     {
         $cabinet->setStorage(resolve('cache.store'))
-            ->register('now', function ($user) {
+            ->share('now', function ($user) {
                 return Carbon::now('Asia/Kuala_Lumpur');
             })->forever('last_read', function ($user) {
                 return Carbon::now('Asia/Kuala_Lumpur')->toDateTimeString();

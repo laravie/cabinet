@@ -13,7 +13,7 @@ class BasicRuntimeTest extends TestCase
         $user = factory(User::class)->create();
 
         $user->cabinet()
-            ->register('friends', function ($user) {
+            ->share('friends', function ($user) {
                 return ['Taylor', 'Mior Muhammad Zaki'];
             });
 
