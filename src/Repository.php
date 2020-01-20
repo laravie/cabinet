@@ -134,14 +134,16 @@ class Repository
      * Register new cache data.
      *
      * @param  string  $key
-     * @param  callable  $callback
+     * @param  mixed  $value
      * @param  \DateTimeInterface|\DateInterval|float|int|string|null  $ttl
      *
      * @return $this
      */
-    public function put(string $key, callable $callback, $ttl = null)
+    public function put(string $key, $value, $ttl = null)
     {
-        return $this->share($key, $callback, $ttl ?? 'forever');
+        return $this->share($key, static function () use ($value) {
+            return $value;
+        }, $ttl ?? 'forever');
     }
 
     /**
