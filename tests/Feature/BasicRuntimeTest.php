@@ -17,9 +17,13 @@ class BasicRuntimeTest extends TestCase
                 return ['Taylor', 'Mior Muhammad Zaki'];
             });
 
+        $user->cabinet()->put('foo', 'bar');
+
         $this->assertSame(['Taylor', 'Mior Muhammad Zaki'], $user->cabinet('friends'));
         $this->assertSame(['Taylor', 'Mior Muhammad Zaki'], $user->cabinet()->get('friends'));
+        $this->assertSame('bar', $user->cabinet()->get('foo'));
     }
+
 
     /** @test */
     public function it_reused_cached_value_on_each_called()
