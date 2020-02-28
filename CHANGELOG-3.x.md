@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `laravie/cabinet`.
 
+## 3.0.1
+
+Released: 2020-02-28
+
+### Changes
+
+* Add support for Laravel Framework v7.
+
 ## 3.0.0
 
 Released: 2020-01-20
