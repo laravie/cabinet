@@ -3,7 +3,7 @@ Runtime Cache for Laravel Eloquent
 
 Cabinet allows you to attach runtime or persistent caching to any Laravel Eloquent instance.
 
-[![Build Status](https://travis-ci.org/laravie/cabinet.svg?branch=master)](https://travis-ci.org/laravie/cabinet)
+[![tests](https://github.com/laravie/cabinet/actions/workflows/tests.yml/badge.svg)](https://github.com/laravie/cabinet/actions/workflows/tests.yml)
 [![Latest Stable Version](https://poser.pugx.org/laravie/cabinet/v/stable)](https://packagist.org/packages/laravie/cabinet)
 [![Total Downloads](https://poser.pugx.org/laravie/cabinet/downloads)](https://packagist.org/packages/laravie/cabinet)
 [![Latest Unstable Version](https://poser.pugx.org/laravie/cabinet/v/unstable)](https://packagist.org/packages/laravie/cabinet)
@@ -27,7 +27,9 @@ And then run `composer install` or `composer update` from the terminal.
 
 Above installation can also be simplify by using the following command:
 
-    composer require "laravie/cabinet=^3.0"
+```bash
+composer require "laravie/cabinet=^3.0"
+```
 
 ## Usages
 
